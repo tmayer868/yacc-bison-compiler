@@ -1,0 +1,5 @@
+START [i = -10:] while (i < 10:){[x = 0,1,0 + i*(.1:)] [max x {x + (x*x)/(x*x*x - 3:)}][i = i + 1:]} END
+
+START [i = -10:] while (i < 10:){[x = 0,1,0 + i*(.1:)] [max x {x*x - 1:}][i = i + 1:]} END
+
+START [i = -10:] while (i < 10:){[x = 0,1,0 + i*(.1:)] [roots x {x*(1:-x)*(2:-x)}][i = i + 1:]} END
