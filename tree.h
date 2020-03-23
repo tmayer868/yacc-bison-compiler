@@ -35,6 +35,8 @@ struct node{
     char* assign_to;//variable you want to assign node value to 
     char* bool_type;
     char* look_up_var;
+    char* func_arg;
+    char* func_name;
     Dual *val = new Dual;
     node *bool_tree_root;
     node *bool_tree_leaf;
@@ -48,6 +50,7 @@ struct node{
     node *arg5;
     vector<Dual> dual_vec;
     map<char*, Dual*, StrCompare> *variables;//all nodes will point to sampe map.
+    map<char*,node*,StrCompare> *functions;
 
     Dual Add(Dual x,Dual y){
         //Additon rules for 1st and second derivatives
@@ -404,6 +407,13 @@ struct node{
             val -> value = f;
             val -> der_1 = fp;
             val -> der_2 = fpp;
+        }
+        else if(node_type == "func_call"){
+
+            node *func_node = (*functions)[func_name];
+            (*variables)[(*func_node).func_arg] = (*arg1).val;
+            (*func_node).forward();
+            val = (*variables)[(*func_node).func_arg];
         }
         else if(node_type == "print"){
             val = (*arg1).val;

@@ -97,6 +97,7 @@ node *found_root;
 %token ROOTS
 %token HIGH LOW POINTS
 %token EXP LOG POW SIN ASIN COS ACOS TAN ATAN RAISE
+%token DEF FUNCNAME 
 
 /*** Define return type for grammar rules ***/
 
@@ -104,6 +105,7 @@ node *found_root;
 %type<dVal> DUAL
 %type<iVal> FLOAT
 %type<sVal> VARNAME
+%type<sVal> FUNCNAME
 %type<nVal> line 
 %type<nVal> MLINE 
 // operator precdence 
@@ -216,6 +218,13 @@ line: BOL expr EOL{
 		$3 -> has_child = 1;
 		$$ -> node_type = "print";
 		$$ -> arg1 = $3;
+	}
+	|DEF FUNCNAME expr LCURLY line RCURLY{
+		$$ = new node;
+		found_root = find_root($5);
+		found_root -> func_arg = $3 -> look_up_var;
+		function_var[$2] = found_root;
+		
 	}
 	|BOL line EOL{
 		$$ = $2;
@@ -337,7 +346,7 @@ expr:expr ADD expr{
 		$$ -> assign_to = $1;
 		$$ -> arg1 = $3;
 		$$ -> node_type = "assign";
-		$$ -> has_parent =1 ;
+		$$ -> has_parent =1;
 		$$ -> parent = $3;
 		$3 -> has_child = 1;
 		$3 -> next_node = $$;
@@ -517,6 +526,18 @@ expr:expr ADD expr{
 		$$ -> has_parent = 1;
 		
 
+	}
+	|FUNCNAME LCURLY expr RCURLY{
+		$$ = new node;
+		$$ -> node_type = "func_call";
+		$$ -> func_name = $1;
+		$$ -> has_parent = 1;
+		$$ -> parent = $3;
+		$$ -> arg1 = $3;
+		$3 -> has_child = 1;
+		$3 -> next_node = $$;
+		$$ -> functions = &function_var;
+		$$ -> variables = &var;
 	}
 	
 DUAL:FLOAT SHORTHAND{

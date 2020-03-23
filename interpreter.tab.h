@@ -87,7 +87,9 @@ extern int yydebug;
     ACOS = 297,
     TAN = 298,
     ATAN = 299,
-    RAISE = 300
+    RAISE = 300,
+    DEF = 301,
+    FUNCNAME = 302
   };
 #endif
 
@@ -105,7 +107,7 @@ union YYSTYPE
 	node *nVal;
 
 
-#line 109 "interpreter.tab.h" /* yacc.c:1909  */
+#line 111 "interpreter.tab.h" /* yacc.c:1909  */
 };
 
 typedef union YYSTYPE YYSTYPE;

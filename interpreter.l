@@ -29,6 +29,7 @@
 "]"            { return EOL; }
 "["             { return BOL;}
 "END"         { return EOP; }//end of program
+"def"           {return DEF;}
 "START"         { return BOP;}
 "end"           { return END;}
 "while"         {return WHILE;}
@@ -50,8 +51,10 @@
 "atan"          {return ATAN;}
 "^"             {return RAISE;}
 
+
 [+-]?([0-9]*[.])?[0-9]+  { yylval.iVal = std::stof(yytext); return FLOAT; }
 [a-z]* { yylval.sVal = strdup(yytext); return VARNAME; }
+[A-Z]* { yylval.sVal = strdup(yytext); return FUNCNAME; }
 
 ","             {return SEPERATOR;}
 
