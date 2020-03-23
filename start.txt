@@ -1,5 +1,52 @@
-START [i = -10:] while (i < 10:){[x = 0,1,0 + i*(.1:)] [max x {x + (x*x)/(x*x*x - 3:)}][i = i + 1:]} END
+START [i = -10:] while (i < 10:){[x = 0,1,0 + i*(.1:)] [max x { (x*x*x + 4:*x*x - x)/(x*x + 2:)}][i = i + 1:]} END
 
 START [i = -10:] while (i < 10:){[x = 0,1,0 + i*(.1:)] [max x {x*x - 1:}][i = i + 1:]} END
 
 START [i = -10:] while (i < 10:){[x = 0,1,0 + i*(.1:)] [roots x {x*(1:-x)*(2:-x)}][i = i + 1:]} END
+
+START [x = 2,1,0] while ((x*x + 1:) <1000:){[x = x*x][print{x}]} END
+
+
+START [x = 0,1,0] [max x high 10: low -10: points 100: {(4:*x*x*x - x*x + 1:)/(x*x + 200:)}] END
+
+START [x = 0,1,0] [roots x high 10: low -10: points 100: {(1:-x)*(1:+x)*(2: - x)*(4:-x)}] END
+
+START [x = 0,1,0] [roots x high 10: low -10: points 100: {(1:-x)*(1:+x)*(2: - x)*(4:-x)}] END
+
+START [x = 1,0,0] [count = 0:] while (x <= 100:){[count = count + x*x][x = x + 1:][print{count}]} END
+
+START [x = 0,1,0] [max x high 5: low -5: points 20: {(x*x*x + x*x - x)/(x*x*x*x + 10:)}] END
+
+START [x = 0,1,0] [roots x high 5: low -5: points 20: {(x*x*x + x*x - x)/(x*x*x*x + 10:)}] END
+
+START [x = 1:] [count = 0:] [while(x <= 100:){[count = count + x][x = x + 1:][print{count}]}] END
+
+START 
+[n = 100000:]
+[x = 1,1,0]
+[coef = 1: + x/n]
+[m = 0:] 
+[ans = coef] 
+while(m < (n - 1:))
+    {[ans = ans*coef]
+    [m = m + 1:]} 
+[print{ans}] 
+END
+
+
+max x high 10: low -10: points 30: { (3:*x*x*x - x*x + 1:)/(4:*x*x*x*x - x*x + 4:)}
+
+
+START
+[x = 0,1,0]
+max x high 10: low -10: points 35: {pow{x,3:} + pow{x,2:} - x - 1: }
+
+START
+[x = 0,1,0]
+max x high 10: low -10: points 35: {x*x*x + x*x - x - 1: }
+
+
+START
+[x = 0,1,0]
+roots x high 10: low -10: points 20: {sin{x}*(x*x + x*cos{x} + 1:)}
+END

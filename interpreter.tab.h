@@ -68,12 +68,26 @@ extern int yydebug;
     BOL = 278,
     BOP = 279,
     WHILE = 280,
-    END = 281,
-    RCURLY = 282,
-    LCURLY = 283,
-    PRINT = 284,
-    MAX = 285,
-    ROOTS = 286
+    IF = 281,
+    END = 282,
+    RCURLY = 283,
+    LCURLY = 284,
+    PRINT = 285,
+    MAX = 286,
+    ROOTS = 287,
+    HIGH = 288,
+    LOW = 289,
+    POINTS = 290,
+    EXP = 291,
+    LOG = 292,
+    POW = 293,
+    SIN = 294,
+    ASIN = 295,
+    COS = 296,
+    ACOS = 297,
+    TAN = 298,
+    ATAN = 299,
+    RAISE = 300
   };
 #endif
 
@@ -91,7 +105,7 @@ union YYSTYPE
 	node *nVal;
 
 
-#line 95 "interpreter.tab.h" /* yacc.c:1909  */
+#line 109 "interpreter.tab.h" /* yacc.c:1909  */
 };
 
 typedef union YYSTYPE YYSTYPE;
