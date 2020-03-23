@@ -49,7 +49,7 @@ node* find_root(node *n){
 }
 
 map<char*, Dual*, StrCompare> var;
-
+map<char*, node*,StrCompare> function_var;
 
 vector<Dual> dual_vec;
 vector<Dual*> pointer_vec;
@@ -88,13 +88,15 @@ node *found_root;
 %token EOP
 %token BOL
 %token BOP
-%token WHILE 
+%token WHILE IF
 %token END
 %token RCURLY
 %token LCURLY
 %token PRINT 
 %token MAX
 %token ROOTS
+%token HIGH LOW POINTS
+%token EXP LOG POW SIN ASIN COS ACOS TAN ATAN RAISE
 
 /*** Define return type for grammar rules ***/
 
@@ -105,9 +107,9 @@ node *found_root;
 %type<nVal> line 
 %type<nVal> MLINE 
 // operator precdence 
-%left ADD SUB
-%right MULT DIV
-
+%left  ADD SUB 
+%right MULT DIV 
+%right RAISE
 %%
 
 start: MLINE  {
@@ -145,8 +147,18 @@ line: BOL expr EOL{
 	}
 	|WHILE expr LCURLY line RCURLY {
 		$$ = new node;
-		cout << "here" << endl;
+		//cout << "here" << endl;
 		$$ -> node_type = "while";
+		found_root = find_root($2);
+		$$ -> bool_tree_leaf = $2;
+		$$ -> bool_tree_root = found_root;
+		found_root = find_root($4);
+		$$ -> sub_program = found_root;
+
+	}
+	|IF expr LCURLY line RCURLY {
+		$$ = new node;
+		$$ -> node_type = "if";
 		found_root = find_root($2);
 		$$ -> bool_tree_leaf = $2;
 		$$ -> bool_tree_root = found_root;
@@ -170,6 +182,30 @@ line: BOL expr EOL{
 		$$ -> arg1 = $2;
 		$$ -> arg2 = found_root;
 		$$ -> bool_tree_leaf = $4;
+		$$ -> variables = &var;
+	}
+	|MAX expr HIGH expr LOW expr POINTS expr LCURLY expr RCURLY{
+		$$ = new node;
+		$$ -> node_type = "extrema2";
+		found_root = find_root($10);
+		$$ -> arg1 = $2;
+		$$ -> arg2 = found_root;
+		$$ -> arg3 = $4;
+		$$ -> arg4 = $6;
+		$$ -> arg5 = $8;
+		$$ -> bool_tree_leaf = $10;
+		$$ -> variables = &var;
+	}
+	|ROOTS expr HIGH expr LOW expr POINTS expr LCURLY expr RCURLY{
+		$$ = new node;
+		$$ -> node_type = "roots2";
+		found_root = find_root($10);
+		$$ -> arg1 = $2;
+		$$ -> arg2 = found_root;
+		$$ -> arg3 = $4;
+		$$ -> arg4 = $6;
+		$$ -> arg5 = $8;
+		$$ -> bool_tree_leaf = $10;
 		$$ -> variables = &var;
 	}
 	|PRINT LCURLY expr RCURLY{
@@ -247,6 +283,24 @@ expr:expr ADD expr{
 		$$ -> arg1 = $1;
 		$$ -> arg2 = $3;
 		$$ -> node_type = "div";
+		$$ -> has_parent = 1;
+		found_root = find_root($3);
+		(*found_root).has_parent = 1;
+		(*found_root).parent = $1;
+		$1 -> next_node = found_root;
+		$1 -> has_child = 1;
+		$3 -> next_node = $$;
+		$3 -> has_child = 1;
+		$$ -> parent = $3;
+
+	}
+	|expr RAISE expr{
+		//node type div
+		$$ = new node;
+		$$ -> variables = &var;
+		$$ -> arg1 = $1;
+		$$ -> arg2 = $3;
+		$$ -> node_type = "raise";
 		$$ -> has_parent = 1;
 		found_root = find_root($3);
 		(*found_root).has_parent = 1;
@@ -368,6 +422,102 @@ expr:expr ADD expr{
 		$$ -> parent = $3;
 		
 	}
+	|EXP LCURLY expr RCURLY{
+		$$ = new node;
+		$$ -> node_type = "exp";
+		$$ -> arg1 = $3;
+		$$ -> parent = $3;
+		$$ -> has_parent = 1;
+		$3 -> next_node = $$;
+		$3 -> has_child = 1;
+
+	}
+	|LOG LCURLY expr RCURLY{
+		$$ = new node;
+		$$ -> node_type = "log";
+		$$ -> arg1 = $3;
+		$$ -> parent = $3;
+		$$ -> has_parent = 1;
+		$3 -> next_node = $$;
+		$3 -> has_child = 1;
+
+	}
+	|SIN LCURLY expr RCURLY{
+		$$ = new node;
+		$$ -> node_type = "sin";
+		$$ -> arg1 = $3;
+		$$ -> parent = $3;
+		$$ -> has_parent = 1;
+		$3 -> next_node = $$;
+		$3 -> has_child = 1;
+
+	}
+	|ASIN LCURLY expr RCURLY{
+		$$ = new node;
+		$$ -> node_type = "asin";
+		$$ -> arg1 = $3;
+		$$ -> parent = $3;
+		$$ -> has_parent = 1;
+		$3 -> next_node = $$;
+		$3 -> has_child = 1;
+
+	}
+	|COS LCURLY expr RCURLY{
+		$$ = new node;
+		$$ -> node_type = "cos";
+		$$ -> arg1 = $3;
+		$$ -> parent = $3;
+		$$ -> has_parent = 1;
+		$3 -> next_node = $$;
+		$3 -> has_child = 1;
+
+	}
+	|ACOS LCURLY expr RCURLY{
+		$$ = new node;
+		$$ -> node_type = "acos";
+		$$ -> arg1 = $3;
+		$$ -> parent = $3;
+		$$ -> has_parent = 1;
+		$3 -> next_node = $$;
+		$3 -> has_child = 1;
+
+	}
+	|TAN LCURLY expr RCURLY{
+		$$ = new node;
+		$$ -> node_type = "tan";
+		$$ -> arg1 = $3;
+		$$ -> parent = $3;
+		$$ -> has_parent = 1;
+		$3 -> next_node = $$;
+		$3 -> has_child = 1;
+
+	}
+	|ATAN LCURLY expr RCURLY{
+		$$ = new node;
+		$$ -> node_type = "atan";
+		$$ -> arg1 = $3;
+		$$ -> parent = $3;
+		$$ -> has_parent = 1;
+		$3 -> next_node = $$;
+		$3 -> has_child = 1;
+
+	}
+	|POW LCURLY expr SEPERATOR expr RCURLY{
+		$$ = new node;
+		$$ -> node_type = "pow";
+		$$ -> arg1 = $3;
+		$$ -> arg2 = $5;
+		$3 -> next_node = $5;
+		$3 -> has_child = 1;
+		$5 -> parent = $3;
+		$5 -> has_parent = 1;
+		$5 -> next_node = $$;
+		$5 -> has_child = 1;
+		$$ -> parent = $5;
+		$$ -> has_parent = 1;
+		
+
+	}
 	
 DUAL:FLOAT SHORTHAND{
 	
@@ -399,8 +549,6 @@ DUAL:FLOAT SHORTHAND{
 	
 
 
-
- 
 
 
 %%

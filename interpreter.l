@@ -32,9 +32,23 @@
 "START"         { return BOP;}
 "end"           { return END;}
 "while"         {return WHILE;}
+"if"            {return IF;}
 "print"         {return PRINT;}
 "max"           {return MAX; }
 "roots"         {return ROOTS;}
+"high"          {return HIGH;}
+"low"           {return LOW;}
+"points"        {return POINTS;}
+"exp"           {return EXP;}
+"log"           {return LOG;}
+"pow"           {return POW;}
+"cos"           {return COS;}
+"sin"           {return SIN;}
+"acos"          {return ACOS;}
+"asin"          {return ASIN;}
+"tan"           {return TAN;}
+"atan"          {return ATAN;}
+"^"             {return RAISE;}
 
 [+-]?([0-9]*[.])?[0-9]+  { yylval.iVal = std::stof(yytext); return FLOAT; }
 [a-z]* { yylval.sVal = strdup(yytext); return VARNAME; }
